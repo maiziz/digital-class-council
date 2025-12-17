@@ -1,0 +1,293 @@
+  // Add this function before renderSettings (around line 1554)
+  
+  const renderManagement = () => {
+    const [showAddClass, setShowAddClass] = useState(false);
+    const [showAddStudent, setShowAddStudent] = useState(false);
+    const [newClass, setNewClass] = useState({ name: '', major: '', year: config.schoolYear });
+    const [newStudent, setNewStudent] = useState({ 
+      name: '', 
+      gender: 'M' as 'M' | 'F', 
+      birthDate: '', 
+      registrationNumber: '' 
+    });
+
+    const addClass = () => {
+      if (!newClass.name || !newClass.major) {
+        alert('يرجى ملء جميع الحقول');
+        return;
+      }
+      const id = `class-${Date.now()}`;
+      setClasses(prev => [...prev, {
+        id,
+        name: newClass.name,
+        major: newClass.major,
+        year: newClass.year,
+        students: []
+      }]);
+      setNewClass({ name: '', major: '', year: config.schoolYear });
+      setShowAddClass(false);
+      alert('تم إضافة القسم بنجاح');
+    };
+
+    const deleteClass = (classId: string) => {
+      if (confirm('هل أنت متأكد من حذف هذا القسم؟ سيتم حذف جميع الطلاب أيضاً.')) {
+        setClasses(prev => prev.filter(c => c.id !== classId));
+        if (currentClassId === classId && classes.length > 1) {
+          setCurrentClassId(classes.find(c => c.id !== classId)?.id || '');
+        }
+        alert('تم حذف القسم');
+      }
+    };
+
+    const addStudent = () => {
+      if (!currentClassId) {
+        alert('يرجى اختيار قسم أولاً');
+        return;
+      }
+      if (!newStudent.name || !newStudent.birthDate || !newStudent.registrationNumber) {
+        alert('يرجى ملء جميع الحقول');
+        return;
+      }
+
+      // Create empty term data for new student
+      const emptyMarks: Marks = {} as Marks;
+      SUBJECTS.forEach(sub => {
+        emptyMarks[sub.key] = { eval: 0, test: 0, exam: 0, avg: 0, teacher_remark: '' };
+      });
+
+      const emptyTermData: TermData = {
+        rank: 0,
+        avg: 0,
+        marks: emptyMarks,
+        council_data: {
+          final_decision: 'بدون',
+          observation: '',
+          absence_status: 'مواظب',
+          behavior_status: 'حسن'
+        }
+      };
+
+      const newStudentData: Student = {
+        id: `std-${Date.now()}`,
+        name: newStudent.name,
+        gender: newStudent.gender,
+        birthDate: newStudent.birthDate,
+        registrationNumber: newStudent.registrationNumber,
+        terms: {
+          1: { ...emptyTermData },
+          2: { ...emptyTermData },
+          3: { ...emptyTermData }
+        },
+        annual: {
+          avg: 0,
+          rank: 0,
+          decision: 'يعيد السنة'
+        }
+      };
+
+      setClasses(prev => prev.map(c => 
+        c.id === currentClassId 
+          ? { ...c, students: [...c.students, newStudentData] }
+          : c
+      ));
+
+      setNewStudent({ name: '', gender: 'M', birthDate: '', registrationNumber: '' });
+      setShowAddStudent(false);
+      alert('تم إضافة التلميذ بنجاح');
+    };
+
+    const deleteStudent = (studentId: string) => {
+      if (confirm('هل أنت متأكد من حذف هذا التلميذ؟')) {
+        setClasses(prev => prev.map(c => ({
+          ...c,
+          students: c.students.filter(s => s.id !== studentId)
+        })));
+        alert('تم حذف التلميذ');
+      }
+    };
+
+    return (
+      <div className="max-w-7xl mx-auto space-y-8 animate-fade-in pb-20">
+        {/* Class Management Section */}
+        <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <School className="text-blue-600" size={24} />
+              <h2 className="text-2xl font-bold text-slate-800">إدارة الأقسام</h2>
+            </div>
+            <button
+              onClick={() => setShowAddClass(!showAddClass)}
+              className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 font-bold"
+            >
+              <Users size={18} />
+              إضافة قسم جديد
+            </button>
+          </div>
+
+          {showAddClass && (
+            <div className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+              <div className="grid grid-cols-3 gap-4 mb-4">
+                <input
+                  type="text"
+                  placeholder="اسم القسم (مثال: 3 ع ت 1)"
+                  value={newClass.name}
+                  onChange={(e) => setNewClass({...newClass, name: e.target.value})}
+                  className="p-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none"
+                />
+                <input
+                  type="text"
+                  placeholder="التخصص (مثال: علوم تجريبية)"
+                  value={newClass.major}
+                  onChange={(e) => setNewClass({...newClass, major: e.target.value})}
+                  className="p-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none"
+                />
+                <input
+                  type="text"
+                  placeholder="السنة الدراسية"
+                  value={newClass.year}
+                  onChange={(e) => setNewClass({...newClass, year: e.target.value})}
+                  className="p-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none"
+                />
+              </div>
+              <div className="flex gap-2">
+                <button onClick={addClass} className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 font-bold">
+                  حفظ
+                </button>
+                <button onClick={() => setShowAddClass(false)} className="bg-slate-300 text-slate-700 px-4 py-2 rounded-lg hover:bg-slate-400 font-bold">
+                  إلغاء
+                </button>
+              </div>
+            </div>
+          )}
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {classes.map(cls => (
+              <div key={cls.id} className="p-4 border border-slate-200 rounded-lg hover:border-blue-300 hover:shadow-md transition-all">
+                <div className="flex justify-between items-start mb-2">
+                  <div>
+                    <h3 className="font-bold text-lg text-slate-800">{cls.name}</h3>
+                    <p className="text-sm text-slate-500">{cls.major}</p>
+                    <p className="text-xs text-slate-400">{cls.year}</p>
+                  </div>
+                  <button
+                    onClick={() => deleteClass(cls.id)}
+                    className="text-red-500 hover:text-red-700 p-1"
+                    title="حذف القسم"
+                  >
+                    <X size={18} />
+                  </button>
+                </div>
+                <div className="text-sm text-slate-600 mt-2">
+                  <span className="font-bold">{cls.students.length}</span> طالب
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Student Management Section */}
+        <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <GraduationCap className="text-green-600" size={24} />
+              <h2 className="text-2xl font-bold text-slate-800">إدارة التلاميذ</h2>
+            </div>
+            <button
+              onClick={() => setShowAddStudent(!showAddStudent)}
+              className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 font-bold"
+              disabled={!currentClassId}
+            >
+              <User size={18} />
+              إضافة تلميذ
+            </button>
+          </div>
+
+          {!currentClassId && (
+            <div className="text-center py-8 text-slate-500">
+              <AlertCircle size={48} className="mx-auto mb-4 text-slate-300" />
+              <p>يرجى اختيار قسم من الشريط الجانبي</p>
+            </div>
+          )}
+
+          {showAddStudent && currentClassId && (
+            <div className="mb-6 p-4 bg-green-50 rounded-lg border border-green-200">
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                <input
+                  type="text"
+                  placeholder="الاسم الكامل"
+                  value={newStudent.name}
+                  onChange={(e) => setNewStudent({...newStudent, name: e.target.value})}
+                  className="p-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-green-500 outline-none"
+                />
+                <select
+                  value={newStudent.gender}
+                  onChange={(e) => setNewStudent({...newStudent, gender: e.target.value as 'M' | 'F'})}
+                  className="p-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-green-500 outline-none"
+                >
+                  <option value="M">ذكر</option>
+                  <option value="F">أنثى</option>
+                </select>
+                <input
+                  type="text"
+                  placeholder="تاريخ الميلاد (DD/MM/YYYY)"
+                  value={newStudent.birthDate}
+                  onChange={(e) => setNewStudent({...newStudent, birthDate: e.target.value})}
+                  className="p-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-green-500 outline-none"
+                />
+                <input
+                  type="text"
+                  placeholder="رقم التسجيل"
+                  value={newStudent.registrationNumber}
+                  onChange={(e) => setNewStudent({...newStudent, registrationNumber: e.target.value})}
+                  className="p-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-green-500 outline-none"
+                />
+              </div>
+              <div className="flex gap-2">
+                <button onClick={addStudent} className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 font-bold">
+                  حفظ
+                </button>
+                <button onClick={() => setShowAddStudent(false)} className="bg-slate-300 text-slate-700 px-4 py-2 rounded-lg hover:bg-slate-400 font-bold">
+                  إلغاء
+                </button>
+              </div>
+            </div>
+          )}
+
+          {currentClassId && (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="bg-slate-50 border-b border-slate-200">
+                  <tr>
+                    <th className="p-3 text-right font-bold">الاسم</th>
+                    <th className="p-3 text-center font-bold">الجنس</th>
+                    <th className="p-3 text-center font-bold">تاريخ الميلاد</th>
+                    <th className="p-3 text-center font-bold">رقم التسجيل</th>
+                    <th className="p-3 text-center font-bold">الإجراءات</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {students.map(student => (
+                    <tr key={student.id} className="hover:bg-slate-50">
+                      <td className="p-3 font-medium">{student.name}</td>
+                      <td className="p-3 text-center">{student.gender === 'M' ? 'ذكر' : 'أنثى'}</td>
+                      <td className="p-3 text-center font-mono text-sm">{student.birthDate}</td>
+                      <td className="p-3 text-center font-mono text-sm">{student.registrationNumber}</td>
+                      <td className="p-3 text-center">
+                        <button
+                          onClick={() => deleteStudent(student.id)}
+                          className="text-red-500 hover:text-red-700 p-1"
+                          title="حذف التلميذ"
+                        >
+                          <X size={18} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };

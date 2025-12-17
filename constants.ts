@@ -10,7 +10,7 @@ export const getDecision = (avg: number, config: AppConfig = DEFAULT_CONFIG) => 
   return 'إنذار';
 };
 
-const getBehavior = () => {
+export const getBehavior = () => {
   const rand = Math.random();
   if (rand > 0.9) return BEHAVIORS[2]; // مشاغب
   if (rand > 0.8) return BEHAVIORS[3]; // كثير الحركة
@@ -84,37 +84,82 @@ const generateStudentList = (count: number, basePerformance: number): Student[] 
     currentAvg -= (Math.random() * 0.4); 
     if (currentAvg < 6) currentAvg = 6;
 
-    const detailedMarks = generateDetailedMarks(currentAvg);
-    
-    // Calculate actual total average from the detailed marks
-    const sumAvg = Object.values(detailedMarks).reduce((acc, m) => acc + m.avg, 0);
-    const realAvg = Number((sumAvg / SUBJECTS.length).toFixed(2));
+    // Generate Terms
+    const terms: Record<number, any> = {};
+    let avgSum = 0;
 
-    // Assign random absence status
-    let absenceStatus = ABSENCE_OPTIONS[0]; // Punctual
-    const randAbs = Math.random();
-    if (randAbs > 0.95) absenceStatus = ABSENCE_OPTIONS[2]; // Frequent
-    else if (randAbs > 0.9) absenceStatus = ABSENCE_OPTIONS[3]; // Unjustified
-    else if (randAbs > 0.8) absenceStatus = ABSENCE_OPTIONS[1]; // Justified
+    ([1, 2, 3] as const).forEach(termId => {
+        // Variation per term (-1 to +1 points relative to base)
+        const termAvgBase = Math.min(19, Math.max(5, currentAvg + (Math.random() * 2 - 1)));
+        const detailedMarks = generateDetailedMarks(termAvgBase);
+        const sumAvg = Object.values(detailedMarks).reduce((acc, m) => acc + m.avg, 0);
+        const realAvg = Number((sumAvg / Object.keys(detailedMarks).length).toFixed(2));
+        
+        avgSum += realAvg;
+
+         // Assign random absence status
+        let absenceStatus = ABSENCE_OPTIONS[0]; // Punctual
+        const randAbs = Math.random();
+        if (randAbs > 0.95) absenceStatus = ABSENCE_OPTIONS[2]; // Frequent
+        else if (randAbs > 0.9) absenceStatus = ABSENCE_OPTIONS[3]; // Unjustified
+        else if (randAbs > 0.8) absenceStatus = ABSENCE_OPTIONS[1]; // Justified
+
+        terms[termId] = {
+            rank: 0, // Will calculate later
+            avg: realAvg,
+            marks: detailedMarks,
+            council_data: {
+                final_decision: getDecision(realAvg, DEFAULT_CONFIG),
+                observation: getObservation(realAvg),
+                absence_status: absenceStatus,
+                behavior_status: getBehavior()
+            }
+        };
+    });
+
+    const annualAvg = Number((avgSum / 3).toFixed(2));
+    
+    // Generate random birth date (students aged 13-16, born 2008-2011)
+    const birthYear = 2008 + Math.floor(Math.random() * 4);
+    const birthMonth = String(Math.floor(Math.random() * 12) + 1).padStart(2, '0');
+    const birthDay = String(Math.floor(Math.random() * 28) + 1).padStart(2, '0');
+    const birthDate = `${birthDay}/${birthMonth}/${birthYear}`;
+    
+    // Generate registration number (e.g., 2024-0001, 2024-0002, etc.)
+    const regNumber = `${new Date().getFullYear()}-${String(i).padStart(4, '0')}`;
 
     students.push({
       id: `std-${i}-${Date.now()}`,
-      rank: i,
       name,
       gender: isFemale ? 'F' : 'M',
-      avg: realAvg,
-      marks: detailedMarks,
-      council_data: {
-        final_decision: getDecision(realAvg, DEFAULT_CONFIG),
-        observation: getObservation(realAvg),
-        absence_status: absenceStatus,
-        behavior_status: getBehavior()
+      birthDate,
+      registrationNumber: regNumber,
+      terms: terms as any,
+      annual: {
+          avg: annualAvg,
+          rank: 0, // Will sort later
+          decision: annualAvg >= DEFAULT_CONFIG.admissionThreshold ? 'ينتقل' : 'يعيد السنة'
       }
     });
   }
   
-  // Re-sort by actual average to ensure rank is correct
-  return students.sort((a, b) => b.avg - a.avg).map((s, idx) => ({...s, rank: idx + 1}));
+  // Rank Sort helper
+  const updateRanks = (list: Student[]) => {
+      // Annual Rank
+      list.sort((a, b) => b.annual.avg - a.annual.avg);
+      list.forEach((s, idx) => s.annual.rank = idx + 1);
+
+      // Term Ranks
+      ([1, 2, 3] as const).forEach(t => {
+          list.sort((a, b) => b.terms[t].avg - a.terms[t].avg);
+          list.forEach((s, idx) => s.terms[t].rank = idx + 1);
+      });
+      
+      // Default sort by Annual Rank
+      return list.sort((a, b) => a.annual.rank - b.annual.rank);
+  };
+
+  return updateRanks(students);
 };
 
 export const generateClasses = (): ClassGroup[] => {
