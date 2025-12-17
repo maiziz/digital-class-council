@@ -137,6 +137,7 @@ export default function App() {
   const [editFormData, setEditFormData] = useState<Partial<SubjectData>>({});
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const csvInputRef = useRef<HTMLInputElement>(null);
 
   // Initialize data
   useEffect(() => {
@@ -294,6 +295,98 @@ export default function App() {
     };
     reader.readAsText(file);
     e.target.value = '';
+  };
+
+  const handleCSVImport = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const text = event.target?.result as string;
+        const lines = text.split('\n').filter(line => line.trim());
+        
+        if (lines.length < 2) {
+          alert('ملف CSV فارغ أو غير صالح');
+          return;
+        }
+
+        const dataLines = lines.slice(1);
+        const classMap = new Map<string, { name: string; major: string; year: string; students: any[] }>();
+        
+        dataLines.forEach(line => {
+          const values = line.split(',').map(v => v.trim());
+          if (values.length < 7) return;
+          
+          const [className, major, year, studentName, gender, birthDate, regNumber] = values;
+          
+          if (!classMap.has(className)) {
+            classMap.set(className, { name: className, major: major, year: year, students: [] });
+          }
+          
+          classMap.get(className)!.students.push({
+            name: studentName,
+            gender: gender as 'M' | 'F',
+            birthDate: birthDate,
+            registrationNumber: regNumber
+          });
+        });
+
+        const newClasses: ClassGroup[] = [];
+        
+        classMap.forEach((classData) => {
+          const students: Student[] = classData.students.map((s, idx) => {
+            const emptyMarks: Marks = {} as Marks;
+            SUBJECTS.forEach(sub => {
+              emptyMarks[sub.key] = { eval: 0, test: 0, exam: 0, avg: 0, teacher_remark: '' };
+            });
+
+            const emptyTermData: TermData = {
+              rank: 0,
+              avg: 0,
+              marks: emptyMarks,
+              council_data: {
+                final_decision: 'بدون',
+                observation: '',
+                absence_status: 'مواظب',
+                behavior_status: 'حسن'
+              }
+            };
+
+            return {
+              id: `std-${Date.now()}-${idx}`,
+              name: s.name,
+              gender: s.gender,
+              birthDate: s.birthDate,
+              registrationNumber: s.registrationNumber,
+              terms: {
+                1: { ...emptyTermData },
+                2: { ...emptyTermData },
+                3: { ...emptyTermData }
+              },
+              annual: { avg: 0, rank: 0, decision: 'يعيد السنة' }
+            };
+          });
+
+          newClasses.push({
+            id: `class-${Date.now()}-${classData.name}`,
+            name: classData.name,
+            major: classData.major,
+            year: classData.year,
+            students: students
+          });
+        });
+
+        setClasses(prev => [...prev, ...newClasses]);
+        alert(`تم استيراد ${newClasses.length} قسم بنجاح مع ${newClasses.reduce((sum, c) => sum + c.students.length, 0)} تلميذ`);
+        e.target.value = '';
+      } catch (error) {
+        console.error('CSV Import Error:', error);
+        alert('خطأ في استيراد ملف CSV. تأكد من التنسيق الصحيح.');
+      }
+    };
+    reader.readAsText(file, 'UTF-8');
   };
 
   // --- Logic for Settings ---
@@ -1763,13 +1856,30 @@ export default function App() {
               <School className="text-blue-600" size={24} />
               <h2 className="text-2xl font-bold text-slate-800">إدارة الأقسام</h2>
             </div>
-            <button
-              onClick={() => setShowAddClass(!showAddClass)}
-              className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 font-bold"
-            >
-              <Users size={18} />
-              إضافة قسم جديد
-            </button>
+            <div className="flex gap-2">
+              <input
+                ref={csvInputRef}
+                type="file"
+                accept=".csv"
+                onChange={handleCSVImport}
+                className="hidden"
+              />
+              <button
+                onClick={() => csvInputRef.current?.click()}
+                className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 font-bold"
+                title="استيراد من CSV"
+              >
+                <Upload size={18} />
+                استيراد CSV
+              </button>
+              <button
+                onClick={() => setShowAddClass(!showAddClass)}
+                className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 font-bold"
+              >
+                <Users size={18} />
+                إضافة قسم جديد
+              </button>
+            </div>
           </div>
 
           {(showAddClass || editingClass) && (

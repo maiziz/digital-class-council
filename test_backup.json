@@ -1,0 +1,214 @@
+{
+  "config": {
+    "excellence": 18,
+    "congrats": 16,
+    "encouragement": 14,
+    "honor": 12,
+    "admissionThreshold": 10,
+    "schoolName": "ثانوية: الشيخ بوعمامة",
+    "schoolYear": "2024/2025",
+    "district": "وسط الجزائر",
+    "showRank": true,
+    "showDecision": true,
+    "showPhoto": false,
+    "printColor": true,
+    "primaryColor": "blue",
+    "coefficients": {
+      "math": 3,
+      "phys": 2,
+      "sci": 2,
+      "arab": 2,
+      "fr": 2,
+      "eng": 1,
+      "hist": 1,
+      "civ": 1,
+      "isl": 1,
+      "art": 1,
+      "mus": 1,
+      "pe": 1
+    }
+  },
+  "classes": [
+    {
+      "id": "test-class-1",
+      "name": "3 ع ت 1",
+      "major": "علوم تجريبية",
+      "year": "2024-2025",
+      "students": [
+        {
+          "id": "test-std-001",
+          "name": "بن علي محمد",
+          "gender": "M",
+          "birthDate": "15/05/2008",
+          "registrationNumber": "2024-0001",
+          "terms": {
+            "1": {
+              "rank": 1,
+              "avg": 16.5,
+              "marks": {
+                "math": { "eval": 16, "test": 17, "exam": 18, "avg": 17.33, "teacher_remark": "عمل ممتاز" },
+                "phys": { "eval": 15, "test": 16, "exam": 17, "avg": 16.33, "teacher_remark": "جيد جداً" },
+                "sci": { "eval": 16, "test": 15, "exam": 16, "avg": 15.83, "teacher_remark": "جيد" },
+                "arab": { "eval": 17, "test": 16, "exam": 17, "avg": 16.83, "teacher_remark": "ممتاز" },
+                "fr": { "eval": 15, "test": 16, "exam": 16, "avg": 15.83, "teacher_remark": "جيد" },
+                "eng": { "eval": 16, "test": 17, "exam": 17, "avg": 16.83, "teacher_remark": "ممتاز" },
+                "hist": { "eval": 15, "test": 16, "exam": 16, "avg": 15.83, "teacher_remark": "جيد" },
+                "civ": { "eval": 17, "test": 17, "exam": 18, "avg": 17.5, "teacher_remark": "ممتاز" },
+                "isl": { "eval": 16, "test": 17, "exam": 17, "avg": 16.83, "teacher_remark": "جيد جداً" },
+                "art": { "eval": 18, "test": 18, "exam": 19, "avg": 18.5, "teacher_remark": "ممتاز" },
+                "mus": { "eval": 17, "test": 18, "exam": 18, "avg": 17.83, "teacher_remark": "ممتاز" },
+                "pe": { "eval": 19, "test": 19, "exam": 20, "avg": 19.5, "teacher_remark": "ممتاز" }
+              },
+              "council_data": {
+                "final_decision": "تهنئة",
+                "observation": "تلميذ متفوق، واصل",
+                "absence_status": "مواظب",
+                "behavior_status": "سلوك مثالي"
+              }
+            },
+            "2": {
+              "rank": 1,
+              "avg": 17.2,
+              "marks": {
+                "math": { "eval": 17, "test": 18, "exam": 19, "avg": 18.17, "teacher_remark": "ممتاز" },
+                "phys": { "eval": 16, "test": 17, "exam": 18, "avg": 17.17, "teacher_remark": "جيد جداً" },
+                "sci": { "eval": 17, "test": 16, "exam": 17, "avg": 16.83, "teacher_remark": "جيد جداً" },
+                "arab": { "eval": 18, "test": 17, "exam": 18, "avg": 17.83, "teacher_remark": "ممتاز" },
+                "fr": { "eval": 16, "test": 17, "exam": 17, "avg": 16.83, "teacher_remark": "جيد جداً" },
+                "eng": { "eval": 17, "test": 18, "exam": 18, "avg": 17.83, "teacher_remark": "ممتاز" },
+                "hist": { "eval": 16, "test": 17, "exam": 17, "avg": 16.83, "teacher_remark": "جيد" },
+                "civ": { "eval": 18, "test": 18, "exam": 19, "avg": 18.5, "teacher_remark": "ممتاز" },
+                "isl": { "eval": 17, "test": 18, "exam": 18, "avg": 17.83, "teacher_remark": "ممتاز" },
+                "art": { "eval": 19, "test": 19, "exam": 20, "avg": 19.5, "teacher_remark": "ممتاز" },
+                "mus": { "eval": 18, "test": 19, "exam": 19, "avg": 18.83, "teacher_remark": "ممتاز" },
+                "pe": { "eval": 20, "test": 20, "exam": 20, "avg": 20, "teacher_remark": "ممتاز" }
+              },
+              "council_data": {
+                "final_decision": "تهنئة",
+                "observation": "أداء ممتاز، استمر",
+                "absence_status": "مواظب",
+                "behavior_status": "سلوك مثالي"
+              }
+            },
+            "3": {
+              "rank": 1,
+              "avg": 16.8,
+              "marks": {
+                "math": { "eval": 16, "test": 17, "exam": 18, "avg": 17.33, "teacher_remark": "ممتاز" },
+                "phys": { "eval": 15, "test": 16, "exam": 17, "avg": 16.33, "teacher_remark": "جيد جداً" },
+                "sci": { "eval": 16, "test": 16, "exam": 17, "avg": 16.5, "teacher_remark": "جيد جداً" },
+                "arab": { "eval": 17, "test": 17, "exam": 18, "avg": 17.5, "teacher_remark": "ممتاز" },
+                "fr": { "eval": 15, "test": 16, "exam": 16, "avg": 15.83, "teacher_remark": "جيد" },
+                "eng": { "eval": 16, "test": 17, "exam": 17, "avg": 16.83, "teacher_remark": "جيد جداً" },
+                "hist": { "eval": 15, "test": 16, "exam": 16, "avg": 15.83, "teacher_remark": "جيد" },
+                "civ": { "eval": 17, "test": 18, "exam": 18, "avg": 17.83, "teacher_remark": "ممتاز" },
+                "isl": { "eval": 16, "test": 17, "exam": 17, "avg": 16.83, "teacher_remark": "جيد جداً" },
+                "art": { "eval": 18, "test": 19, "exam": 19, "avg": 18.83, "teacher_remark": "ممتاز" },
+                "mus": { "eval": 17, "test": 18, "exam": 18, "avg": 17.83, "teacher_remark": "ممتاز" },
+                "pe": { "eval": 19, "test": 20, "exam": 20, "avg": 19.83, "teacher_remark": "ممتاز" }
+              },
+              "council_data": {
+                "final_decision": "تهنئة",
+                "observation": "نتائج ممتازة",
+                "absence_status": "مواظب",
+                "behavior_status": "سلوك مثالي"
+              }
+            }
+          },
+          "annual": {
+            "avg": 16.83,
+            "rank": 1,
+            "decision": "ينتقل"
+          }
+        },
+        {
+          "id": "test-std-002",
+          "name": "قاسي سارة",
+          "gender": "F",
+          "birthDate": "22/08/2008",
+          "registrationNumber": "2024-0002",
+          "terms": {
+            "1": {
+              "rank": 2,
+              "avg": 15.2,
+              "marks": {
+                "math": { "eval": 14, "test": 15, "exam": 16, "avg": 15.33, "teacher_remark": "جيد" },
+                "phys": { "eval": 13, "test": 14, "exam": 15, "avg": 14.33, "teacher_remark": "جيد" },
+                "sci": { "eval": 14, "test": 14, "exam": 15, "avg": 14.5, "teacher_remark": "جيد" },
+                "arab": { "eval": 16, "test": 15, "exam": 16, "avg": 15.83, "teacher_remark": "جيد جداً" },
+                "fr": { "eval": 15, "test": 16, "exam": 16, "avg": 15.83, "teacher_remark": "جيد جداً" },
+                "eng": { "eval": 14, "test": 15, "exam": 15, "avg": 14.83, "teacher_remark": "جيد" },
+                "hist": { "eval": 15, "test": 15, "exam": 16, "avg": 15.5, "teacher_remark": "جيد" },
+                "civ": { "eval": 16, "test": 16, "exam": 17, "avg": 16.5, "teacher_remark": "جيد جداً" },
+                "isl": { "eval": 15, "test": 16, "exam": 16, "avg": 15.83, "teacher_remark": "جيد" },
+                "art": { "eval": 17, "test": 17, "exam": 18, "avg": 17.5, "teacher_remark": "ممتاز" },
+                "mus": { "eval": 16, "test": 17, "exam": 17, "avg": 16.83, "teacher_remark": "جيد جداً" },
+                "pe": { "eval": 18, "test": 18, "exam": 19, "avg": 18.5, "teacher_remark": "ممتاز" }
+              },
+              "council_data": {
+                "final_decision": "تشجيع",
+                "observation": "تلميذة مجتهدة",
+                "absence_status": "مواظب",
+                "behavior_status": "حسن"
+              }
+            },
+            "2": {
+              "rank": 2,
+              "avg": 15.8,
+              "marks": {
+                "math": { "eval": 15, "test": 16, "exam": 17, "avg": 16.17, "teacher_remark": "جيد جداً" },
+                "phys": { "eval": 14, "test": 15, "exam": 16, "avg": 15.33, "teacher_remark": "جيد" },
+                "sci": { "eval": 15, "test": 15, "exam": 16, "avg": 15.5, "teacher_remark": "جيد" },
+                "arab": { "eval": 17, "test": 16, "exam": 17, "avg": 16.83, "teacher_remark": "جيد جداً" },
+                "fr": { "eval": 16, "test": 17, "exam": 17, "avg": 16.83, "teacher_remark": "جيد جداً" },
+                "eng": { "eval": 15, "test": 16, "exam": 16, "avg": 15.83, "teacher_remark": "جيد" },
+                "hist": { "eval": 16, "test": 16, "exam": 17, "avg": 16.5, "teacher_remark": "جيد جداً" },
+                "civ": { "eval": 17, "test": 17, "exam": 18, "avg": 17.5, "teacher_remark": "ممتاز" },
+                "isl": { "eval": 16, "test": 17, "exam": 17, "avg": 16.83, "teacher_remark": "جيد جداً" },
+                "art": { "eval": 18, "test": 18, "exam": 19, "avg": 18.5, "teacher_remark": "ممتاز" },
+                "mus": { "eval": 17, "test": 18, "exam": 18, "avg": 17.83, "teacher_remark": "ممتاز" },
+                "pe": { "eval": 19, "test": 19, "exam": 20, "avg": 19.5, "teacher_remark": "ممتاز" }
+              },
+              "council_data": {
+                "final_decision": "تشجيع",
+                "observation": "تحسن ملحوظ",
+                "absence_status": "مواظب",
+                "behavior_status": "حسن"
+              }
+            },
+            "3": {
+              "rank": 2,
+              "avg": 15.5,
+              "marks": {
+                "math": { "eval": 14, "test": 15, "exam": 16, "avg": 15.33, "teacher_remark": "جيد" },
+                "phys": { "eval": 13, "test": 14, "exam": 15, "avg": 14.33, "teacher_remark": "جيد" },
+                "sci": { "eval": 14, "test": 15, "exam": 15, "avg": 14.83, "teacher_remark": "جيد" },
+                "arab": { "eval": 16, "test": 16, "exam": 17, "avg": 16.5, "teacher_remark": "جيد جداً" },
+                "fr": { "eval": 15, "test": 16, "exam": 16, "avg": 15.83, "teacher_remark": "جيد" },
+                "eng": { "eval": 15, "test": 15, "exam": 16, "avg": 15.5, "teacher_remark": "جيد" },
+                "hist": { "eval": 15, "test": 16, "exam": 16, "avg": 15.83, "teacher_remark": "جيد" },
+                "civ": { "eval": 16, "test": 17, "exam": 17, "avg": 16.83, "teacher_remark": "جيد جداً" },
+                "isl": { "eval": 15, "test": 16, "exam": 16, "avg": 15.83, "teacher_remark": "جيد" },
+                "art": { "eval": 17, "test": 18, "exam": 18, "avg": 17.83, "teacher_remark": "ممتاز" },
+                "mus": { "eval": 16, "test": 17, "exam": 17, "avg": 16.83, "teacher_remark": "جيد جداً" },
+                "pe": { "eval": 18, "test": 19, "exam": 19, "avg": 18.83, "teacher_remark": "ممتاز" }
+              },
+              "council_data": {
+                "final_decision": "تشجيع",
+                "observation": "نتائج جيدة",
+                "absence_status": "مواظب",
+                "behavior_status": "حسن"
+              }
+            }
+          },
+          "annual": {
+            "avg": 15.5,
+            "rank": 2,
+            "decision": "ينتقل"
+          }
+        }
+      ]
+    }
+  ],
+  "lastSaved": "2024-12-17T07:00:00.000Z"
+}
